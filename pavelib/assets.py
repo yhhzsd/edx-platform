@@ -384,14 +384,24 @@ def coffeescript_files():
 
 @task
 @no_help
-def compile_coffeescript(*files):
+def compile_coffeescript(*coffee_files):
     """
     Compile CoffeeScript to JavaScript.
     """
-    if not files:
-        files = ["`{}`".format(coffeescript_files())]
+    js_files = ""
+
+    if not coffee_files:
+        coffee_files = ["`{}`".format(coffeescript_files())]
+        js_files = r"`{} | sed 's/\.coffee/\.js/g'`".format(coffeescript_files())
+    else:
+        js_files = r"`{} | sed 's/\.coffee/\.js/g'`".format(*coffee_files)
+
     sh(cmd(
-        "node_modules/.bin/coffee", "--compile", *files
+        "node_modules/.bin/coffee", "--compile", *coffee_files
+    ))
+
+    sh(cmd(
+        r"sed -i '1i\\/\* eslint-disable \*\/\n'", js_files
     ))
 
 

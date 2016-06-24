@@ -281,7 +281,7 @@ def run_jshint(options):
     )
 
     try:
-        num_violations = int(_get_count_from_last_line(jshint_report, "jshint"))
+        num_violations = int(_get_count_from_last_line(eslint_report, "jshint"))
     except TypeError:
         raise BuildFailure(
             "Error. Number of jshint violations could not be found in {jshint_report}".format(

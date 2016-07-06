@@ -1,0 +1,22 @@
+<% if (support_legend.show_legend) { %>
+    <span class="support-documentation">
+        <a class="support-documentation-link"
+           href="http://edx.readthedocs.io/projects/edx-partner-course-staff/en/latest/exercises_tools/create_exercises_and_tools.html#id3" target="_blank">
+            <%- support_legend.documentation_label %>
+        </a>
+        <span class="support-documentation-level">
+            <span class="icon fa fa-star supported" aria-hidden="true"></span>
+            <span><%- gettext('Supported') %></span>
+        </span>
+        <span class="support-documentation-level">
+            <span class="icon fa fa-circle-o supported" aria-hidden="true"></span>
+            <span><%- gettext('Provisional') %></span>
+        </span>
+        <% if (support_legend.allow_unsupported_xblocks) { %>
+        <span class="support-documentation-level">
+            <span class="icon fa fa-flag unsupported" aria-hidden="true"></span>
+            <span><%- gettext('Not Supported') %></span>
+        </span>
+        <% } %>
+    </span>
+<% } %>

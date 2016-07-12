@@ -655,6 +655,7 @@ def collect_assets(systems, settings, collectstatic_log="/dev/null"):
     """
 
     # unless specified, collectstatic (which can be very verbose) pipes to /dev/null
+
     if collectstatic_log is None:
         collectstatic_stdout_str = ""
     else:
@@ -780,7 +781,7 @@ def update_assets(args):
         help="list of themes to compile sass for",
     )
     parser.add_argument(
-        '--collect-log', dest='collect_log_file', default=None,
+        '--collect-log', dest='collect_log_file', default="/dev/null",
         help="When running collectstatic, direct output to specified log file",
     )
     args = parser.parse_args(args)

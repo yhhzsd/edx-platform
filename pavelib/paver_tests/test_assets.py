@@ -302,14 +302,16 @@ class TestUpdateAssetsTask(PaverTestCase):
         cmd_args = options.get("cmd_args", [""])
         expected_substring = options.get("expected_substring", None)
         call_task('pavelib.assets.update_assets', args=cmd_args)
-        self._assert_substring_in_list(self.task_messages, expected_substring)
+        self.assertTrue(
+            self._is_substring_in_list(self.task_messages, expected_substring),
+            msg="{substring} not found in messages".format(substring=expected_substring)
+        )
 
-    def _assert_substring_in_list(self, messages_list, expected_substring):
+    def _is_substring_in_list(self, messages_list, expected_substring):
         """
-        Assert that a given string is somewhere in a list of strings
+        Return true a given string is somewhere in a list of strings
         """
         for message in messages_list:
             if expected_substring in message:
-                self.assertTrue(True)
-                return
-        self.assertTrue(False, msg="{expected} not found in list of messages".format(expected=expected_substring))
+                return True
+        return False

@@ -1,0 +1,9 @@
+<h6 class="hd-6 fake-breadcrumbs">
+  <span class="crumb">
+    <a class="all-topics" href="">All Topics</a>
+  </span>
+  <% contents.forEach(function(content) { %>
+    <span class="fa fa-chevron-right"></span>
+    <span class="crumb"><%- content %></span>
+  <% }); %>
+</h6>

@@ -12,13 +12,16 @@ define(["jquery", "js/views/baseview", 'edx-ui-toolkit/js/utils/html-utils'],
                 var support_indicator_template = this.loadTemplate("add-xblock-component-support-level");
                 var support_legend_template = this.loadTemplate("add-xblock-component-support-legend");
                 this.template = this.loadTemplate(template_name);
-                this.$el.html(this.template({
-                    type: this.model.type, templates: this.model.templates,
-                    support_legend: this.model.support_legend,
-                    support_indicator_template: support_indicator_template, 
-                    support_legend_template: support_legend_template,
-                    HtmlUtils: HtmlUtils
-                }));
+                HtmlUtils.setHtml(
+                    this.$el,
+                    HtmlUtils.HTML(this.template({
+                        type: this.model.type, templates: this.model.templates,
+                        support_legend: this.model.support_legend,
+                        support_indicator_template: support_indicator_template,
+                        support_legend_template: support_legend_template,
+                        HtmlUtils: HtmlUtils
+                    }))
+                );
                 // Make the tabs on problems into "real tabs"
                 this.$('.tab-group').tabs();
             }

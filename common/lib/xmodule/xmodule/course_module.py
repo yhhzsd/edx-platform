@@ -831,9 +831,11 @@ class CourseFields(object):
         scope=Scope.settings
     )
     allow_unsupported_xblocks = Boolean(
-        display_name=_("Allow the creation of unsupported XBlocks"),
+        display_name=_("Add Unsupported Problems and Tools"),
         help=_(
-            "If set to True, XBlocks that are not supported by edX can be created in Studio. Scary legal text..."
+            "Enter true or false. If true, you can add unsupported content types to your course in Studio. "
+            "These content types are not recommended for use in courses due to non-compliance with one or "
+            "more of the base requirements, such as testing, accessibility, internationalization, and documentation."
         ),
         scope=Scope.settings, default=False
     )

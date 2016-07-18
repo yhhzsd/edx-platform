@@ -196,14 +196,9 @@
       padding-right: ($baseline/2);
     }
 
-    .icon.supported {
+    .icon {
       color: $primary-accent;
     }
-
-    .icon.unsupported {
-      color: $primary-dark;
-    }
-
   }
 
   // individual menus

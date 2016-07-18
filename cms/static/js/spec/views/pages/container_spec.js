@@ -738,8 +738,8 @@ define(["jquery", "underscore", "underscore.string", "edx-ui-toolkit/js/utils/sp
                                 // show_unsupported_xblocks is true, so 3 support levels should be shown
                                 expect($(supportDocumentation[0]).find('.support-documentation-level').length).toBe(3);
 
-                                // verify only one has the unsupported class
-                                expect($(supportDocumentation[0]).find('.unsupported').length).toBe(1);
+                                // verify only one has the unsupported item
+                                expect($(supportDocumentation[0]).find('.fa-circle-o').length).toBe(1);
                             });
                             
                             it('does render support level indicators if present in JSON', function () {

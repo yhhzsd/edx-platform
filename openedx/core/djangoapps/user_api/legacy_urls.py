@@ -29,6 +29,10 @@ urlpatterns = patterns(
         user_api_views.UpdateEmailOptInPreference.as_view(),
         name="preferences_email_opt_in"
     ),
+    url(
+        r'^v1/preferences/country_tz/$',
+        user_api_views.CountryTimeZoneListView.as_view(),
+    ),
 )
 
 if settings.FEATURES.get('ENABLE_COMBINED_LOGIN_REGISTRATION'):

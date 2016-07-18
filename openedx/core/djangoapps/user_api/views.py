@@ -31,7 +31,7 @@ from student.cookies import set_logged_in_cookies
 from openedx.core.djangoapps.theming.helpers import get_value as get_themed_value
 from openedx.core.lib.api.authentication import SessionAuthenticationAllowInactiveUser
 from util.json_request import JsonResponse
-from .preferences.api import update_email_opt_in
+from .preferences.api import get_country_time_zones, update_email_opt_in
 from .helpers import FormDescription, shim_student_view, require_post_params
 from .models import UserPreference, UserProfile
 from .accounts import (
@@ -1036,3 +1036,15 @@ class UpdateEmailOptInPreference(APIView):
         email_opt_in = request.data['email_opt_in'].lower() == 'true'
         update_email_opt_in(request.user, org, email_opt_in)
         return HttpResponse(status=status.HTTP_200_OK)
+
+
+class CountryTimeZoneListView(generics.ListAPIView):
+    """
+    DRF class for
+    """
+    paginate_by = 10
+    paginate_by_param = "page_size"
+
+    def get_queryset(self):
+        country_code = self.kwargs['country_code'] if self.kwargs['country_code'] else None
+        return get_country_time_zones(country_code)

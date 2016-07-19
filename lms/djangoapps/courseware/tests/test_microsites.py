@@ -27,7 +27,7 @@ class TestMicrosites(SharedModuleStoreTestCase, LoginEnrollmentTestCase):
         super(TestMicrosites, cls).setUpClass()
         cls.course = CourseFactory.create(
             display_name='Robot_Super_Course',
-            org='TestMicrositeX',
+            org='TestSiteX',
             emit_signals=True,
         )
         cls.chapter0 = ItemFactory.create(parent_location=cls.course.location, display_name='Overview')
@@ -44,7 +44,7 @@ class TestMicrosites(SharedModuleStoreTestCase, LoginEnrollmentTestCase):
         # have a course which explicitly sets visibility in catalog to False
         cls.course_hidden_visibility = CourseFactory.create(
             display_name='Hidden_course',
-            org='TestMicrositeX',
+            org='TestSiteX',
             catalog_visibility=CATALOG_VISIBILITY_NONE,
             emit_signals=True,
         )
@@ -52,7 +52,7 @@ class TestMicrosites(SharedModuleStoreTestCase, LoginEnrollmentTestCase):
         # have a course which explicitly sets visibility in catalog and about to true
         cls.course_with_visibility = CourseFactory.create(
             display_name='visible_course',
-            org='TestMicrositeX',
+            org='TestSiteX',
             course="foo",
             catalog_visibility=CATALOG_VISIBILITY_CATALOG_AND_ABOUT,
             emit_signals=True,

@@ -63,7 +63,7 @@ class FilebasedMicrositeBackendTests(TestCase):
         """
         microsite.set_by_domain(self.microsite_subdomain)
         self.assertEqual(
-            microsite.get_value_for_org('TestMicrositeX', 'platform_name'),
+            microsite.get_value_for_org('TestSiteX', 'platform_name'),
             'Test Microsite'
         )
 
@@ -71,7 +71,7 @@ class FilebasedMicrositeBackendTests(TestCase):
         microsite.clear()
         with patch('django.conf.settings.MICROSITE_CONFIGURATION', False):
             self.assertEqual(
-                microsite.get_value_for_org('TestMicrositeX', 'platform_name', 'Default Value'),
+                microsite.get_value_for_org('TestSiteX', 'platform_name', 'Default Value'),
                 'Default Value'
             )
 
@@ -82,7 +82,7 @@ class FilebasedMicrositeBackendTests(TestCase):
         microsite.set_by_domain(self.microsite_subdomain)
         self.assertEqual(
             microsite.get_all_orgs(),
-            set(['TestMicrositeX', 'LogistrationX'])
+            set(['TestSiteX', 'LogistrationX'])
         )
 
         # if no config is set

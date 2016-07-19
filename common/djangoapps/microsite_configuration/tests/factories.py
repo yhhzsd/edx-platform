@@ -42,7 +42,7 @@ class MicrositeFactory(DjangoModelFactory):
         "payment_support_email": "test_microsit_dbe@edx.org",
         "ENABLE_MKTG_SITE": False,
         "SITE_NAME": "test_microsite.localhost",
-        "course_org_filter": "TestMicrositeX",
+        "course_org_filter": "TestSiteX",
         "course_about_show_social_links": False,
         "css_overrides_file": "test_microsite/css/test_microsite.css",
         "show_partners": False,

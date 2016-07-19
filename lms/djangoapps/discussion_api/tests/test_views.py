@@ -724,6 +724,7 @@ class ThreadViewSetCreateTest(DiscussionAPIViewTestMixin, ModuleStoreTestCase):
             "username": self.user.username,
             "created_at": "2015-05-19T00:00:00Z",
             "updated_at": "2015-05-19T00:00:00Z",
+            "read": True,
         })
         self.register_post_thread_response(cs_thread)
         request_data = {
@@ -754,12 +755,12 @@ class ThreadViewSetCreateTest(DiscussionAPIViewTestMixin, ModuleStoreTestCase):
             "voted": False,
             "vote_count": 0,
             "comment_count": 1,
-            "unread_comment_count": 1,
+            "unread_comment_count": 0,
             "comment_list_url": "http://testserver/api/discussion/v1/comments/?thread_id=test_thread",
             "endorsed_comment_list_url": None,
             "non_endorsed_comment_list_url": None,
             "editable_fields": ["abuse_flagged", "following", "raw_body", "read", "title", "topic_id", "type", "voted"],
-            "read": False,
+            "read": True,
             "has_endorsed": False,
             "response_count": 0,
         }
@@ -854,7 +855,7 @@ class ThreadViewSetPartialUpdateTest(DiscussionAPIViewTestMixin, ModuleStoreTest
 
     def test_basic(self):
         self.register_get_user_response(self.user)
-        self.register_thread({"created_at": "Test Created Date", "updated_at": "Test Updated Date"})
+        self.register_thread({"created_at": "Test Created Date", "updated_at": "Test Updated Date", "read": True})
         request_data = {"raw_body": "Edited body"}
         response = self.request_patch(request_data)
         self.assertEqual(response.status_code, 200)
@@ -870,6 +871,7 @@ class ThreadViewSetPartialUpdateTest(DiscussionAPIViewTestMixin, ModuleStoreTest
                 "created_at": "Test Created Date",
                 "updated_at": "Test Updated Date",
                 "comment_count": 1,
+                "read": True,
             })
         )
         self.assertEqual(
@@ -885,7 +887,7 @@ class ThreadViewSetPartialUpdateTest(DiscussionAPIViewTestMixin, ModuleStoreTest
                 "anonymous_to_peers": ["False"],
                 "closed": ["False"],
                 "pinned": ["False"],
-                "read": ["False"],
+                "read": ["True"],
             }
         )
 
@@ -908,7 +910,7 @@ class ThreadViewSetPartialUpdateTest(DiscussionAPIViewTestMixin, ModuleStoreTest
     @ddt.unpack
     def test_closed_thread(self, field, value):
         self.register_get_user_response(self.user)
-        self.register_thread({"closed": True})
+        self.register_thread({"closed": True, "read": True})
         self.register_flag_response("thread", "test_thread")
         request_data = {field: value}
         response = self.request_patch(request_data)
@@ -917,11 +919,12 @@ class ThreadViewSetPartialUpdateTest(DiscussionAPIViewTestMixin, ModuleStoreTest
         self.assertEqual(
             response_data,
             self.expected_response_data({
+                "read": True,
                 "closed": True,
                 "abuse_flagged": value,
                 "editable_fields": ["abuse_flagged", "read"],
                 "comment_count": 1,
-                "unread_comment_count": 1,
+                "unread_comment_count": 0,
             })
         )
 

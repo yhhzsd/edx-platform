@@ -185,8 +185,10 @@
       .support-documentation-link {
         // Override JQuery ui-widget-content link color (black) with our usual link color and hover action.
         color: $uxpl-blue-base;
+        text-decoration: none;
         &:hover {
           color: $uxpl-blue-hover-active;
+          text-decoration: underline;
         }
 
         padding-right: ($baseline/2);

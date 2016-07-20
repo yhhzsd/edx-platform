@@ -176,6 +176,7 @@
     .support-documentation {
       float: right;
       @include margin($baseline, 0, ($baseline/2), ($baseline/2));
+      @include font-size(14);
 
       .support-documentation-level {
         padding-right: ($baseline/2);
@@ -183,9 +184,9 @@
 
       .support-documentation-link {
         // Override JQuery ui-widget-content link color (black) with our usual link color and hover action.
-        color: $blue;
+        color: $uxpl-blue-base;
         &:hover {
-          color: $orange-d1;
+          color: $uxpl-blue-hover-active;
         }
 
         padding-right: ($baseline/2);
@@ -227,6 +228,7 @@
       background: $white;
       color: $gray-d3;
       text-align: left;
+      font-family: $f-sans-serif;
 
       &:hover {
         @include transition(background-color $tmg-f2 linear 0s);

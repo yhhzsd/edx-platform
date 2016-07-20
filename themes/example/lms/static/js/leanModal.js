@@ -1,3 +1,4 @@
+"use strict";
 (function($){
   $.fn.extend({
     /*
@@ -92,7 +93,12 @@
             $notice.show().html(notice);
             // This is for activating leanModal links that were in the notice. We should have a cleaner way of
             // allowing all dynamically added leanmodal links to work.
-            $notice.find("a[rel*=leanModal]").leanModal({ top : 120, overlay: 1, closeButton: ".close-modal", position: 'absolute' });
+            $notice.find("a[rel*=leanModal]").leanModal({
+                top : 120,
+                overlay: 1,
+                closeButton: ".close-modal",
+                position: 'absolute'
+            });
           }
           e.preventDefault();
         });
@@ -113,7 +119,7 @@
   $(document).ready(function ($) {
     $("a[rel*=leanModal]").each(function () {
       $(this).leanModal({ top : 120, overlay: 1, closeButton: ".close-modal", position: 'absolute' });
-      var embed = $($(this).attr('href')).find('iframe')
+      var embed = $($(this).attr('href')).find('iframe');
       if (embed.length > 0 && embed.attr('src')) {
         var sep = (embed.attr('src').indexOf("?") > 0) ? '&' : '?';
         embed.data('src', embed.attr('src') + sep + 'autoplay=1&rel=0');

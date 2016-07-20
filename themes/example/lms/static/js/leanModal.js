@@ -1,5 +1,5 @@
-"use strict";
 (function($){
+  "use strict";
   $.fn.extend({
     /*
      * leanModal prepares an element to be a modal dialog.  Call it once on the

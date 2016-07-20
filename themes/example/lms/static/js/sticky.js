@@ -1,5 +1,6 @@
 
-"use strict";
+/*jshint strict: false */
+
 var $el = $('#sticky'),
     stickyBarTop = $('#sticky').offset().top,
     MIN_WEB_WIDTH = 768;

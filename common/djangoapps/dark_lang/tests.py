@@ -10,7 +10,7 @@ from mock import Mock
 import unittest
 
 from dark_lang.middleware import DarkLangMiddleware
-from dark_lang.api import Darklang
+from dark_lang.views import DarkLangView
 from dark_lang.models import DarkLangConfig
 from django.utils.translation import LANGUAGE_SESSION_KEY
 from student.tests.factories import UserFactory
@@ -76,7 +76,7 @@ class DarkLangMiddlewareTests(TestCase):
         )
 
         # Process the incoming request to set the Language
-        Darklang().process_darklang_request(request)
+        DarkLangView().process_darklang_request(request)
         return request
 
     def process_middleware_request(self, language_session_key=UNSET, accept=UNSET, post_request=None):

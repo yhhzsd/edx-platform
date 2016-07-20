@@ -1,45 +1,15 @@
 ## Override the default styles_version to the Pattern Library version (version 2)
 <%! main_css = "style-main-v2" %>
-
 <%page expression_filter="h"/>
-<%! from django.utils.translation import ugettext as _
-from openedx.core.djangolib.markup import HTML, Text
+<%!
+from django.utils.translation import ugettext as _
 %>
+
 <%inherit file="/main.html" />
-
-<%block name="pagetitle">Preview Language Setting</%block>
+<%block name="pagetitle">${_("Preview Language Setting")}</%block>
 <%block name="nav_skip"></%block>
-
 <%block name="bodyclass">pattern-library</%block>
 
 <%block name="content">
-<h1>
-    ${Text(_("Preview Language Setting"))}
-</h1>
-
-<div tabindex="-1">
-    <form class="form" action="/update_lang/" method="post">
-        <fieldset class="form-group">
-            <div class="field">
-                <label class="field-label" for="input_language">${Text(_("Language Code"))}</label>
-                <input class="field-input input-text" type="text" id="input_language" name="preview_lang"
-                       placeholder="e.g. en" aria-describedby="Input abbreviation for your language of choice" />
-            </div>
-        </fieldset>
-        <div class="form-actions">
-            <button class="btn-brand btn-base" type="submit" name="set_language" value="set_language">${Text(_("Submit"))}</button>
-            <button class="btn-brand btn-base" type="submit" name="reset" value="reset">${Text(_("Reset"))}</button>
-        </div>
-
-        <input type="hidden" name="csrfmiddlewaretoken" value="${ csrf_token }"/>
-    </form>
-
-    <br/>
-    % if not form_submit_message is UNDEFINED:
-        <h3 class="alert-title" id="alert-title-success"> ${Text(_(form_submit_message)).format()}</h3>
-        <p class="alert-copy-with-title">
-            ${Text(_("Please refresh the page to see the changes applied.")).format()}
-        </p>
-    % endif
-</div>
+    <%include file="/darklang/preview_lang_include.html" />
 </%block>

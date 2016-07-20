@@ -186,12 +186,12 @@
         // Override JQuery ui-widget-content link color (black) with our usual link color and hover action.
         color: $uxpl-blue-base;
         text-decoration: none;
+        padding-right: ($baseline/2);
+
         &:hover {
           color: $uxpl-blue-hover-active;
           text-decoration: underline;
         }
-
-        padding-right: ($baseline/2);
       }
     }
 
@@ -200,7 +200,7 @@
     }
 
     .icon {
-      color: $primary-accent;
+      color: $uxpl-primary-accent;
     }
   }
 
@@ -236,6 +236,10 @@
         @include transition(background-color $tmg-f2 linear 0s);
         background: tint($green,30%);
         color: $white;
+
+        .icon {
+          color: $white;
+        }
       }
     }
   }

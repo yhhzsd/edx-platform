@@ -672,7 +672,7 @@ define(['jquery', 'backbone', 'underscore', 'gettext', 'js/views/baseview',
             var warning = this.$('.staff-lock .tip-warning');
             if (warning) {
                 var display;
-                if (this.currentVisibility() !== 'staff_only') {
+                if (this.currentVisibility() === 'visible') {
                     display = 'block';
                 } else {
                     display = 'none';

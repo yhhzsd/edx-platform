@@ -209,6 +209,16 @@ class CoursewarePage(CoursePage):
         """
         return self.q(css="div.proctored-exam.completed").visible
 
+    def has_past_due_date_message(self, problem_type="homework"):
+        """
+        Returns whether the "you have submitted your exam" message is present.
+        This being true implies "the exam contents and results are hidden".
+        """
+        message = "The due date for this {0} has passed.".format(problem_type)
+        print "has_past_due_date_message\n"
+        print self.q(css="div.sequence").html
+        return self.q(css="div.hidden-content").visible
+
     @property
     def entrance_exam_message_selector(self):
         """

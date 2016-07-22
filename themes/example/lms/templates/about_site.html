@@ -48,32 +48,4 @@
   </div>
 </script>
 
-<script>
-  $(document).ready(function() {
-    $(".about-container").html( $("#about-content").html());
-    addSlider();
-  });
-
-  $(window).resize(function(){
-      addSlider();
-  });
-
-  function addSlider(){
-    var isMobileResolution = $(window).width() < 768,
-        sliderExists = $(".about-list").hasClass("slick-slider");
-
-    $(".about-list").toggleClass("slidable", isMobileResolution);
-
-    if (isMobileResolution) {    //Second condition will avoid the multiple calls from resize
-      if (!sliderExists) {
-        $(".about-list").find(".about-list-item").removeClass('col col-4');
-        $(".slidable").slick({
-          nextArrow: '<i class="fa fa-angle-right"></i>',
-          prevArrow: '<i class="fa fa-angle-left"></i>',
-        });
-      }
-    } else {
-        $(".about-container").html($("#about-content").html());
-    }
-  }
-</script>
+<script src="${static.url('js/about-site.js')}"></script>

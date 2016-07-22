@@ -11,7 +11,8 @@ from django.utils.translation import ugettext as _
         <fieldset class="form-group">
             <div class="field">
                 <label class="field-label">${_("Language Code")}
-                    <input class="field-input input-text" type="text" name="preview_lang" placeholder="e.g. en" />
+                    <input class="field-input input-text" type="text" name="preview_lang"
+                           placeholder="${_('For example use en for English')}" />
                 </label>
             </div>
         </fieldset>
@@ -25,7 +26,7 @@ from django.utils.translation import ugettext as _
 
     <br/>
     % if not form_submit_message is UNDEFINED:
-        <h3 class="alert-title"> ${ form_submit_message}</h3>
+        <h3 class="alert-title"> ${form_submit_message}</h3>
         % if success:
             <p class="alert-copy-with-title">
                 ${_("Please refresh the page to see the changes applied.")}

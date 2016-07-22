@@ -83,15 +83,16 @@ class DarkLangMiddleware(object):
 
     def _fuzzy_match(self, lang_code):
         """Returns a fuzzy match for lang_code"""
+        match = None
         if lang_code in self.released_langs:
-            return lang_code
-
-        lang_prefix = lang_code.partition('-')[0]
-        for released_lang in self.released_langs:
-            released_prefix = released_lang.partition('-')[0]
-            if lang_prefix == released_prefix:
-                return released_lang
-        return None
+            match = lang_code
+        else:
+            lang_prefix = lang_code.partition('-')[0]
+            for released_lang in self.released_langs:
+                released_prefix = released_lang.partition('-')[0]
+                if lang_prefix == released_prefix:
+                    match = released_lang
+        return match
 
     def _clean_accept_headers(self, request):
         """
@@ -115,7 +116,7 @@ class DarkLangMiddleware(object):
 
     def _activate_preview_language(self, request):
         """
-        Check the user's dark language setting in the sessiona and apply it
+        Check the user's dark language setting in the session and apply it
         """
         auth_user = request.user.is_authenticated()
         preview_lang = None

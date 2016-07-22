@@ -1,6 +1,6 @@
 (function(require) {
     require(['edx-ui-toolkit/js/utils/html-utils'], function(HtmlUtils) {
-
+        "use strict"
         $(function() {
             $("#submit_btn").click(function(e) {
                 e.preventDefault();
@@ -9,7 +9,6 @@
                     submitForm(validate_form.data);
                 }
             });
-
         });
 
         var errorMessages = {
@@ -70,12 +69,9 @@
                         addErrorDiv(id);
                     }
                 }
-
             }
             response.data = data;
             return response;
         }
-
-
     });
 }).call(this, require || RequireJS.require);

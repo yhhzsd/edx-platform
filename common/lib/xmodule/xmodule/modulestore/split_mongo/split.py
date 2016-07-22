@@ -2100,6 +2100,10 @@ class SplitMongoModuleStore(SplitBulkWriteMixin, ModuleStoreWriteBase):
                 new_locator = course_key.make_usage_key(block_key.type, block_key.id)
                 new_item = self.get_item(new_locator, **kwargs)
 
+                # TODO: Move this code once the following condition is met.
+                # Get to the point where XML import is happening inside the
+                # modulestore that is eventually going to store the data.
+                # Ticket: https://openedx.atlassian.net/browse/PLAT-1046
                 if block_key.type == 'library_content':
                     # Update imported xblocks' 'source_library_version' to keep it up to date.
                     LibraryToolsService(self).update_children(new_item, user_id)

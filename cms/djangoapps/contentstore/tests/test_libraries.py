@@ -63,7 +63,7 @@ class LibraryTestCase(ModuleStoreTestCase):
         self.assertIsInstance(lib_key, LibraryLocator)
         return lib_key
 
-    def _add_library_content_block(self, course, library_key, other_settings=None):
+    def _add_library_content_block(self, course, library_key, publish_item=False, other_settings=None):
         """
         Helper method to add a LibraryContent block to a course.
         The block will be configured to select content from the library
@@ -74,7 +74,7 @@ class LibraryTestCase(ModuleStoreTestCase):
             category='library_content',
             parent_location=course.location,
             user_id=self.user.id,
-            publish_item=False,
+            publish_item=publish_item,
             source_library_id=unicode(library_key),
             **(other_settings or {})
         )

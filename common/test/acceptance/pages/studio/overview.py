@@ -572,14 +572,17 @@ class CourseOutlinePage(CoursePage, CourseOutlineContainer):
         self.q(css=".action-save").first.click()
         self.wait_for_ajax()
 
-    def select_advanced_tab(self):
+    def select_advanced_tab(self, desired_item='special_exam'):
         """
         Select the advanced settings tab
         """
-        print "Select_advanced_tab\n"
-        print self.q(css=".course-outline-modal").html
-        print self.q(css=".settings-tab-button[data-tab='advanced']").html
         self.q(css=".settings-tab-button[data-tab='advanced']").first.click()
+        if desired_item == 'special_exam':
+            self.wait_for_element_presence('input.no_special_exam', 'Special exam settings fields not present.')
+        if desired_item == 'gated_content':
+            self.wait_for_element_visibility('#is_prereq', 'Gating settings fields are present.')
+        if desired_item == 'hide_after_due_date':
+            self.wait_for_element_presence('input[value=hide_after_due]', 'Visibility fields not present.')
 
     def make_exam_proctored(self):
         """

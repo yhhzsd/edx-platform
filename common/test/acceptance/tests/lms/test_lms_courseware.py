@@ -157,7 +157,7 @@ class ProctoredExamTest(UniqueCourseTest):
             self.course_info['run'], self.course_info['display_name']
         )
         course_fix.add_advanced_settings({
-            "enable_special_exams": {"value": "true"}
+            "enable_proctored_exams": {"value": "true"}
         })
 
         course_fix.add_children(
@@ -303,7 +303,7 @@ class ProctoredExamTest(UniqueCourseTest):
 
         LogoutPage(self.browser).visit()
         self._auto_auth(self.USERNAME, self.EMAIL, False)
-        self.courseware_page.visi()
+        self.courseware_page.visit()
         self.assertEqual(self.courseware_page.has_submitted_exam_message(), hide_after_due)
 
     def test_masquerade_visibility_override(self):
@@ -859,7 +859,7 @@ class SubsectionHiddenAfterDueDateTest(UniqueCourseTest):
         self.course_outline.visit()
         self.course_outline.open_subsection_settings_dialog()
 
-        self.course_outline.select_advanced_tab()
+        self.course_outline.select_advanced_tab('hide_after_due_date')
         self.course_outline.make_subsection_hidden_after_due_date()
 
         LogoutPage(self.browser).visit()

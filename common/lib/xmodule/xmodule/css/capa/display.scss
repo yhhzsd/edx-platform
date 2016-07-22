@@ -926,9 +926,10 @@ div.problem .action {
         background-color: #0ea6ec;
       }
       &.check {
-        &.is-disabled {
-          background: #0079bc;
-          color: #fcfcfc;
+        &.is-disabled, &.disabled {
+          background: transparent;
+          border-color: #d2d0d0;
+          color: #6b6969;
         }
       }
     }

@@ -1,4 +1,5 @@
 ## mako
+<%page expression_filter="h"/>
 <%namespace name='static' file='../static_content.html'/>
 <%!
 from itertools import izip_longest
@@ -49,7 +50,6 @@ from openedx.core.lib.courses import course_image_url
     // Truncating the Course Description
     var entireDescriptionContent = $(".course-description").html();
     truncateDescription(entireDescriptionContent);
-      askj
 
     // Truncating the Course learning points
     var entireLearningContent = $(".course-learning .list-bulleted").html();

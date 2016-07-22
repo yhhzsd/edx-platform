@@ -1,4 +1,5 @@
 ## mako
+<%page expression_filter="h"/>
 <%namespace name='static' file='static_content.html'/>
 <%!
 from django.utils.translation import ugettext as _
@@ -22,8 +23,8 @@ from django.core.urlresolvers import reverse
     </div>
     <div class="sr">
       <ul>
-      <li>${course.display_org_with_default | h}</li>
-      <li>${course.display_name | h}</li>
+      <li>${course.display_org_with_default}</li>
+      <li>${course.display_name}</li>
       <li>${_("Starts")}: <time itemprop="startDate" datetime="${course.start_datetime_text()}">${course.start_datetime_text()}</time></li>
     </ul>
     </div>

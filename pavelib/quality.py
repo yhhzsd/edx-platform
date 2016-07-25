@@ -274,7 +274,7 @@ def run_eslint(options):
     violations_limit = int(getattr(options, 'limit', -1))
 
     sh(
-        "eslint . | tee {eslint_report}".format(
+        "eslint --format=compact . | tee {eslint_report}".format(
             eslint_report=eslint_report
         ),
         ignore_error=True
@@ -506,13 +506,13 @@ def _get_count_from_last_line(filename, file_type):
     last_line = _get_report_contents(filename, last_line_only=True)
     if file_type is "python_complexity":
         # Example of the last line of a complexity report: "Average complexity: A (1.93953443446)"
-        regex = r'(\d+.\d+)'
+        regex = r'\d+.\d+'
     else:
-        # Example of the last line of an eslint report (for example): "x 62829 problems (62619 errors, 210 warnings)"
-        regex = r'(\d+)\ problems'
+        # Example of the last line of a compact-formatted eslint report (for example): "62829 problems"
+        regex = r'^\d+'
 
     try:
-        return float(re.search(regex, last_line).group(1))
+        return float(re.search(regex, last_line).group(0))
     # An AttributeError will occur if the regex finds no matches.
     # A ValueError will occur if the returned regex cannot be cast as a float.
     except (AttributeError, ValueError):

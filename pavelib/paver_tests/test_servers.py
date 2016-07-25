@@ -5,10 +5,17 @@ from paver.easy import call_task
 
 from .utils import PaverTestCase
 
-EXPECTED_COFFEE_COMMAND = (
-    u"node_modules/.bin/coffee --compile `find {platform_root}/lms "
-    u"{platform_root}/cms {platform_root}/common -type f -name \"*.coffee\"`"
-)
+EXPECTED_COFFEE_COMMANDS = [
+    (
+        u"node_modules/.bin/coffee --compile `find {platform_root}/lms "
+        u"{platform_root}/cms {platform_root}/common -type f -name \"*.coffee\"`"
+    ),
+    (
+        r"sed -i '1i\\/\* eslint-disable \*\/\n' `find {platform_root}/lms "
+        u"{platform_root}/cms {platform_root}/common -type f -name \"*.coffee\" "
+        r"| sed 's/\.coffee/\.js/g'`"
+    )
+]
 EXPECTED_SASS_COMMAND = (
     u"libsass {sass_directory}"
 )
@@ -238,7 +245,8 @@ class TestPaverServerTasks(PaverTestCase):
             ))
             expected_messages.append(u"xmodule_assets common/static/xmodule")
             expected_messages.append(u"install npm_assets")
-            expected_messages.append(EXPECTED_COFFEE_COMMAND.format(platform_root=self.platform_root))
+            for command in EXPECTED_COFFEE_COMMANDS:
+                expected_messages.append(command.format(platform_root=self.platform_root))
             expected_messages.extend(self.expected_sass_commands(system=system, asset_settings=expected_asset_settings))
         if expected_collect_static:
             expected_messages.append(EXPECTED_COLLECT_STATIC_COMMAND.format(
@@ -280,7 +288,8 @@ class TestPaverServerTasks(PaverTestCase):
             ))
             expected_messages.append(u"xmodule_assets common/static/xmodule")
             expected_messages.append(u"install npm_assets")
-            expected_messages.append(EXPECTED_COFFEE_COMMAND.format(platform_root=self.platform_root))
+            for command in EXPECTED_COFFEE_COMMANDS:
+                expected_messages.append(command.format(platform_root=self.platform_root))
             expected_messages.extend(self.expected_sass_commands(asset_settings=expected_asset_settings))
         if expected_collect_static:
             expected_messages.append(EXPECTED_COLLECT_STATIC_COMMAND.format(

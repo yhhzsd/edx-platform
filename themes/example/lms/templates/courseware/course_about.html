@@ -17,7 +17,7 @@ from openedx.core.djangolib.markup import HTML
   <link rel="stylesheet" type="text/css" href="${static.url('css/slick.css')}"/>
   ## OG (Open Graph) title and description added below to give social media info to display
   ## (https://developers.facebook.com/docs/opengraph/howtos/maximizing-distribution-media-content#tags)
-  <meta property="og:title" content="${course.display_name_with_default_escaped}" />
+  <meta property="og:title" content="${course.display_name_with_default}" />
   <meta property="og:description" content="${get_course_about_section(request, course, 'short_description')}" />
 </%block>
 
@@ -28,37 +28,10 @@ from openedx.core.djangolib.markup import HTML
       <script src="//d3q6qq2zt8nhwv.cloudfront.net/s/js/widgets/coursetalk-read-reviews.js"></script>
   % endif
   <script src="${static.url('js/leanModal.js')}"></script>
+  <script src="${static.url('js/course-about.js')}"></script>
+
   <script type="text/javascript">
-
-  $(window).load(function(){
-    $(".instructor-image").leanModal({closeButton: ".modal_close", top: '10%'});
-  });
-
-  (function() {
-
-    // Create MutationObserver which prevents the body of
-    // the page from scrolling when a modal window is displayed
-    var observer = new MutationObserver(function(mutations, obv){
-      mutations.forEach(function(mutation) {
-        if ($(mutation.target).css('display') === 'block') {
-          $('body').css('overflow','hidden');
-        } else {
-          $('body').css('overflow', 'auto');
-        }
-      });
-    });
-    $('.modal').each(function(index, element){
-      observer.observe(element, {attributes: true, attributeFilter:['style']});
-    });
-
-    // Truncating the Course Description
-    var entireDescriptionContent = $(".course-description").html();
-    truncateDescription(entireDescriptionContent);
-
-    // Truncating the Course learning points
-    var entireLearningContent = $(".course-learning .list-bulleted").html();
-    truncateLearningPoints(entireLearningContent);
-
+  $(function() {
     // Listen for click events on element tagged with the 'register' class
     // Submit the hidden enrolllment form, and include information about which
     // purchasing workflow is being executed (based on which button is clicked)
@@ -80,7 +53,7 @@ from openedx.core.djangolib.markup import HTML
     % if can_add_course_to_cart:
       add_course_complete_handler = function(jqXHR, textStatus) {
         if (jqXHR.status == 200) {
-          location.href = "${cart_link}";
+          location.href = "${cart_link | n, js_escaped_string}";
         }
         if (jqXHR.status == 400) {
           $("#register_error")
@@ -150,61 +123,16 @@ from openedx.core.djangolib.markup import HTML
     });
 
     %endif
-
-  })(this)
-
-
-  function expandDescription(entireDescriptionContent) {
-     var showLessLinkHtml = '<a id="description_less" href="#" class="brand-link">Less</a>'
-     $(".course-description").html(entireDescriptionContent + showLessLinkHtml);
-     $("#description_less").click(function(event) {
-         event.preventDefault();
-         truncateDescription(entireDescriptionContent);
-     });
-  }
-
-  function truncateDescription(entireDescriptionContent) {
-      if (entireDescriptionContent.length > 500) {
-        var truncatedContent = entireDescriptionContent.substring(0, entireDescriptionContent.indexOf(" ", 500));
-        var showMoreLinkHtml = '... <a id="description_show" href="#" class="brand-link">See More</a>';
-        $(".course-description").html(truncatedContent + showMoreLinkHtml);
-        $("#description_show").click(function (event) {
-            event.preventDefault();
-            expandDescription(entireDescriptionContent);
-        });
-      }
-  }
-
-  function expandLearningPoints(entireLearningContent){
-      var showLessLinkHtml = '<a id="learning_less" href="#" class="brand-link learning-points-btn">Less</a>';
-      $(".course-learning .list-bulleted").html(entireLearningContent + showLessLinkHtml);
-      $("#learning_less").click(function(event){
-          truncateLearningPoints(entireLearningContent);
-      });
-  }
-
-  function truncateLearningPoints(entireLearningContent) {
-      var learning_points_count = $(".course-learning .list-bulleted").children().length;
-      if (learning_points_count > 6) {
-          $(".course-learning .list-bulleted").children().slice((6 - learning_points_count)).remove();
-          var showMoreLinkHtml = '<a id="learning_show" href="#" class="brand-link learning-points-btn">See More</a>';
-          $(".course-learning .list-bulleted").append(showMoreLinkHtml);
-          $("#learning_show").click(function (event) {
-              event.preventDefault();
-              expandLearningPoints(entireLearningContent);
-          });
-      }
-  }
-
-
+    });
   </script>
+
   <%include file="../about_site.html" />
   <script src="${static.url('js/course_info.js')}"></script>
   <script src="${static.url('js/slick.min.js')}"></script>
   <script src="${static.url('js/sticky.js')}"></script>
 </%block>
 
-<%block name="pagetitle">${course.display_name_with_default_escaped}</%block>
+<%block name="pagetitle">${course.display_name_with_default}</%block>
 
 <section class="course-info" xmlns="http://www.w3.org/1999/html">
   <header class="hero hero-video grid-manual">
@@ -465,7 +393,7 @@ from openedx.core.djangolib.markup import HTML
     <form id="class_enroll_form" method="post" data-remote="true" action="${reverse('change_enrollment')}">
       <fieldset class="enroll_fieldset">
         <legend class="sr">${_("Enroll")}</legend>
-        <input name="course_id" type="hidden" value="${course.id | h}">
+        <input name="course_id" type="hidden" value="${course.id}">
         <input name="enrollment_action" type="hidden" value="enroll">
       </fieldset>
       <div class="submit">

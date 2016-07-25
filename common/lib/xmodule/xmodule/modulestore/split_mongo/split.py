@@ -779,7 +779,10 @@ class SplitMongoModuleStore(SplitBulkWriteMixin, ModuleStoreWriteBase):
             self._add_cache(course_entry.structure['_id'], runtime)
             self.cache_items(runtime, block_keys, course_entry.course_key, depth, lazy)
 
-        return [runtime.load_item(block_key, course_entry, **kwargs) for block_key in block_keys]
+        blocks = [runtime.load_item(block_key, course_entry, **kwargs) for block_key in block_keys]
+        for block in blocks:
+            block.course_version = course_entry.course_key.version_guid
+        return blocks
 
     def _get_cache(self, course_version_guid):
         """

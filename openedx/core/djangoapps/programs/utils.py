@@ -156,22 +156,24 @@ def get_program_detail_url(program, marketing_root):
     return '{base}/{slug}'.format(base=base, slug=slug)
 
 
-def get_display_category(program):
-    """ Given the program, return the category of the program for display
+def humanize_category(program):
+    """Return a human-readable name for the program category.
+
+    This is a temporary measure. The programs API should return this string in the response.
+
     Arguments:
-        program (Program): The program to get the display category string from
+        program (dict): Representation of the program whose category to parse.
 
     Returns:
-        string, the category for display to the user.
-        Empty string if the program has no category or is null.
+        string, human-readable category name.
     """
-    display_candidate = ''
-    if program and program.get('category'):
-        if program.get('category') == 'xseries':
-            display_candidate = 'XSeries'
-        else:
-            display_candidate = program.get('category', '').capitalize()
-    return display_candidate
+    category = program.get('category')
+    if category == 'xseries':
+        return 'XSeries'
+    elif category == 'micromasters':
+        return 'MicroMasters'
+    elif category:
+        return category.capitalize()
 
 
 def get_completed_courses(student):

@@ -4,6 +4,6 @@
 <div class="ad-link">
     <a href="<%- xseriesUrl %>" class="btn-neutral">
         <span class="icon fa fa-search" aria-hidden="true"></span>
-        <span><%- gettext('Explore New XSeries') %></span>
+        <span><%- gettext('Explore New Programs') %></span>
     </a>
 </div>

@@ -642,7 +642,8 @@ def restart_django_servers():
     ))
 
 
-def collect_assets(systems, settings, collectstatic_log="/dev/null"):
+# def collect_assets(systems, settings, collectstatic_log="/dev/null"):
+def collect_assets(systems, settings, **kwargs):
     """
     Collect static assets, including Django pipeline processing.
     `systems` is a list of systems (e.g. 'lms' or 'studio' or both)
@@ -656,17 +657,41 @@ def collect_assets(systems, settings, collectstatic_log="/dev/null"):
 
     # unless specified, collectstatic (which can be very verbose) pipes to /dev/null
 
-    if collectstatic_log is None:
-        collectstatic_stdout_str = ""
-    else:
-        # pipe to specified file, even if debug has also been passed in
-        collectstatic_stdout_str = "> {output_file}".format(output_file=collectstatic_log)
-
     for sys in systems:
+        collectstatic_stdout_str = _collect_assets_cmd(sys, **kwargs)
         sh(django_cmd(sys, settings, "collectstatic --noinput {logfile_str}".format(
             logfile_str=collectstatic_stdout_str
         )))
         print("\t\tFinished collecting {} assets.".format(sys))
+
+def _collect_assets_cmd(system, **kwargs):
+    """
+    Returns the collecstatic command to be used for the given system
+    """
+    try:
+        if kwargs["collect_log_dir"] is None:
+            collectstatic_stdout_str = ""
+        else:
+        # pipe to specified file, even if debug has also been passed in
+            collectstatic_stdout_str = "> {output_dir}/{sys}-collecstatic.log".format(
+                output_file=kwargs["collect_log_dir"],
+                sys=system
+            )
+    except:
+        collectstatic_stdout_str = "> /dev/null"
+
+
+    return collectstatic_stdout_str
+
+    # collectstatic_log = kwargs.get("collecstatic_log", "/dev/null")
+    #
+    # stdout_str = "> /dev/null"
+    # if collectstatic_log is None:
+    #     stdout_str = ""
+    # elif collectstatic_log == "/dev/null":
+    #     stdout_str = "> /dev/null"
+    # else:
+    #     stdout_str = "> {sys}"
 
 
 def execute_compile_sass(args):
@@ -781,10 +806,11 @@ def update_assets(args):
         help="list of themes to compile sass for",
     )
     parser.add_argument(
-        '--collect-log', dest='collect_log_file', default="/dev/null",
-        help="When running collectstatic, direct output to specified log file",
+        '--collect-log', dest='collect_log_dir', default="/dev/null",
+        help="When running collectstatic, direct output to specified log directory",
     )
     args = parser.parse_args(args)
+    collect_log_args = {}
 
     compile_templated_sass(args.system, args.settings)
     process_xmodule_assets()
@@ -795,13 +821,13 @@ def update_assets(args):
     execute_compile_sass(args)
 
     if args.collect:
-        collect_log_file = args.collect_log_file
+        collect_log_args.update({"collect_log_dir": args.collect_log_dir})
 
         # run collectstatic in debug mode if update_assets is in debug mode and no log location is specified
-        if args.debug and not collect_log_file:
-            collect_log_file = None
+        if args.debug and not args.collect_log_dir:
+            collect_log_args.update({"collect_log_dir": None})
 
-        collect_assets(args.system, args.settings, collectstatic_log=collect_log_file)
+        collect_assets(args.system, args.settings, **collect_log_args)
 
     if args.watch:
         call_task(

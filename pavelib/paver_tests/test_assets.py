@@ -238,6 +238,7 @@ class TestCollectAssets(PaverTestCase):
         Ensure commands sent to the environment for collect_assets are as expected
         """
         specified_log_loc = options.get("specified_log_location", None)
+        specificed_log_dict = {"collect_log_dir": specified_log_loc}
         log_loc = options.get("expected_log_location", "> /dev/null")
         systems = options.get("systems", ["lms"])
         expected_messages = self._set_expected_messages(log_location=log_loc, systems=systems)
@@ -250,7 +251,7 @@ class TestCollectAssets(PaverTestCase):
             collect_assets(
                 systems,
                 "devstack",
-                collectstatic_log=specified_log_loc
+                **specificed_log_dict
             )
         self.assertEqual(self.task_messages, expected_messages)
 

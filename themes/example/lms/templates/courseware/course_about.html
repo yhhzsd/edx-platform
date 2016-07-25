@@ -29,9 +29,12 @@ from openedx.core.djangolib.markup import HTML
   % endif
   <script src="${static.url('js/leanModal.js')}"></script>
   <script type="text/javascript">
-  (function() {
 
+  $(window).load(function(){
     $(".instructor-image").leanModal({closeButton: ".modal_close", top: '10%'});
+  });
+
+  (function() {
 
     // Create MutationObserver which prevents the body of
     // the page from scrolling when a modal window is displayed

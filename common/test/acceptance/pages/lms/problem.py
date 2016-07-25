@@ -199,3 +199,17 @@ class ProblemPage(PageObject):
         """
         self.wait_for_element_visibility('body > .tooltip', 'A tooltip is visible.')
         return self.q(css='body > .tooltip').text[0]
+
+    @property
+    def problem_question(self):
+        """
+        Return the question text of the problem.
+        """
+        return self.q(css="div.problem .wrapper-problem-response legend").text[0]
+
+    @property
+    def problem_question_descriptions(self):
+        """
+        Return a list of question descriptions of the problem.
+        """
+        return self.q(css="div.problem .wrapper-problem-response .question-description").text

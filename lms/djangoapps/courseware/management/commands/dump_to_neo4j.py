@@ -12,7 +12,8 @@ logger = logging.getLogger('neo4j.bolt')
 logger.propagate = False
 logger.disabled = True
 
-ACCEPTABLE_TYPES = (integer, string, unicode, float, bool, tuple, list, set, frozenset)
+ITERABLE_NEO4J_TYPES = (tuple, list, set, frozenset)
+ACCEPTABLE_NEO4J_TYPES = ITERABLE_NEO4J_TYPES + (integer, string, unicode, float, bool)
 
 class ModuleStoreSerializer(object):
     """
@@ -84,9 +85,6 @@ class ModuleStoreSerializer(object):
             for field_name, value in fields.iteritems():
                 fields[field_name] = self.coerce_types(value)
 
-            if label.__class__ not in ACCEPTABLE_TYPES:
-                label = unicode(label)
-
             node = Node(label, **fields)
             nodes.append(node)
             location_to_node[item.location] = node
@@ -110,14 +108,18 @@ class ModuleStoreSerializer(object):
         Returns: either the value, a unicode version of the value, or, if the
         value is iterable, the value with each element being converted to unicode
         """
-        if value.__class__ in (tuple, list, set, frozenset):
-            for index, element in enumerate(value):
-                value[index] = unicode(element)
+        coerced_value = value
+        if isinstance(value, ITERABLE_NEO4J_TYPES):
+            coerced_value = []
+            for element in enumerate(value):
+                coerced_value.append(unicode(element))
+            # convert coerce_value back to its original type
+            coerced_value = type(value)(coerced_value)
 
-        elif value.__class__ not in ACCEPTABLE_TYPES:
-            value = unicode(value)
+        elif not isinstance(value, ACCEPTABLE_NEO4J_TYPES):
+            coerced_value = unicode(value)
 
-        return value
+        return coerced_value
 
 class Command(BaseCommand):
     """
@@ -126,6 +128,11 @@ class Command(BaseCommand):
 
     @staticmethod
     def add_to_transaction(neo4j_entities, transaction):
+        """
+        Args:
+            neo4j_entities: a list of Nodes or Relationships
+            transaction: a neo4j transaction
+        """
         for entity in neo4j_entities:
             transaction.create(entity)
 

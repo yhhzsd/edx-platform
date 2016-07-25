@@ -1,16 +1,16 @@
  # coding=utf-8
 
 import mock
+import logging
 
-from courseware.management.commands.dump_to_neo4j import ModuleStoreSerializer
+import ddt
+from courseware.management.commands.dump_to_neo4j import (
+    ModuleStoreSerializer,
+    ITERABLE_NEO4J_TYPES,
+)
 from django.core.management import call_command
-from xmodule.modulestore.django import modulestore
 from xmodule.modulestore.tests.django_utils import SharedModuleStoreTestCase
 from xmodule.modulestore.tests.factories import CourseFactory, ItemFactory
-
-from py2neo import Node, Relationship
-
-import logging
 
 log = logging.getLogger(__name__)
 
@@ -78,6 +78,7 @@ class TestDumpToNeo4jCommand(TestDumpToNeo4jCommandBase):
         self.assertEqual(mock_transaction.rollback.call_count, 2)
 
 
+@ddt.ddt
 class TestModuleStoreSerializer(TestDumpToNeo4jCommandBase):
     """
     Tests for the ModuleStoreSerializer
@@ -109,3 +110,35 @@ class TestModuleStoreSerializer(TestDumpToNeo4jCommandBase):
         )
         self.assertEqual(len(nodes), 9)
         self.assertEqual(len(relationships), 7)
+
+    @ddt.data(*ITERABLE_NEO4J_TYPES)
+    def test_coerce_types_iterable(self, iterable_type):
+        """
+        Tests the coerce_types helper method for iterable types
+        """
+        example_iterable = iterable_type([object, object, object])
+
+        # each element in the iterable is not unicode:
+        self.assertFalse(any(isinstance(tab, unicode) for tab in example_iterable))
+        # but after they are coerced, they are:
+        coerced = self.modulestore_serializer.coerce_types(example_iterable)
+        self.assertTrue(all(isinstance(tab, unicode) for tab in coerced))
+        # finally, make sure we haven't changed the type:
+        self.assertEqual(type(coerced), iterable_type)
+
+    @ddt.data(
+        (1, 1),
+        (object, u"<type 'object'>"),
+        (1.5, 1.5),
+        (u"úñîçø∂é", u"úñîçø∂é"),
+        ("plain string", "plain string"),
+        (True, True),
+        (None, "None"),
+    )
+    @ddt.unpack
+    def test_coerce_types_base(self, original_value, coerced_expected):
+        """
+        Tests the coerce_types helper for the neo4j base types
+        """
+        coerced_value = self.modulestore_serializer.coerce_types(original_value)
+        self.assertEqual(coerced_value, coerced_expected)

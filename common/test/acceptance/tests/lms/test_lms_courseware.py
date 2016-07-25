@@ -813,6 +813,10 @@ class ProblemStateOnNavigationTest(UniqueCourseTest):
 
 
 class SubsectionHiddenAfterDueDateTest(UniqueCourseTest):
+    """
+    Tests the "hide after due date" setting for
+    subsections.
+    """
     USERNAME = "STUDENT_TESTER"
     EMAIL = "student101@example.com"
 
@@ -844,6 +848,7 @@ class SubsectionHiddenAfterDueDateTest(UniqueCourseTest):
 
         self.dashboard_page = DashboardPage(self.browser)
         self.progress_page = ProgressPage(self.browser, self.course_id)
+        self.problem_page = ProblemPage(self.browser)
         self._setup_subsection()
 
         # Auto-auth register for the course.
@@ -915,7 +920,7 @@ class SubsectionHiddenAfterDueDateTest(UniqueCourseTest):
         self.assertFalse(self.courseware_page.has_past_due_date_message())
 
         self.progress_page.visit()
-        self.assertEqual(self.progress_page.scores('Test Section 1', 'Test Subsection 1'), [(0,1)])
+        self.assertEqual(self.progress_page.scores('Test Section 1', 'Test Subsection 1'), [(0, 1)])
 
         LogoutPage(self.browser).visit()
         self._auto_auth("STAFF_TESTER", "staff101@example.com", True)
@@ -929,4 +934,4 @@ class SubsectionHiddenAfterDueDateTest(UniqueCourseTest):
         self.assertTrue(self.courseware_page.has_past_due_date_message())
 
         self.progress_page.visit()
-        self.assertEqual(self.progress_page.scores('Test Section 1', 'Test Subsection 1'), [(0,1)])
+        self.assertEqual(self.progress_page.scores('Test Section 1', 'Test Subsection 1'), [(0, 1)])

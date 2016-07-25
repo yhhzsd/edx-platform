@@ -582,7 +582,7 @@ class CourseOutlinePage(CoursePage, CourseOutlineContainer):
         if desired_item == 'gated_content':
             self.wait_for_element_visibility('#is_prereq', 'Gating settings fields are present.')
         if desired_item == 'hide_after_due_date':
-            self.wait_for_element_presence('input[value=hide_after_due]', 'Visibility fields not present.')
+            self.wait_for_element_presence('input[value=hide_after_due]', 'Visibility fields not present.', timeout=10)
 
     def make_exam_proctored(self):
         """
@@ -606,8 +606,6 @@ class CourseOutlinePage(CoursePage, CourseOutlineContainer):
         """
         Sets a subsection to be hidden after due date.
         """
-        print "make_subsection_hidden_after_due_date\n"
-        print self.q(css='.modal-type-edit-settings').html
         self.q(css='input[value=hide_after_due]').first.click()
         self.q(css=".action-save").first.click()
         self.wait_for_ajax()

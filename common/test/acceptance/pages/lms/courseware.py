@@ -215,9 +215,7 @@ class CoursewarePage(CoursePage):
         This being true implies "the exam contents and results are hidden".
         """
         message = "The due date for this {0} has passed.".format(problem_type)
-        print "has_past_due_date_message\n"
-        print self.q(css="div.sequence").html
-        return self.q(css="div.hidden-content").visible
+        return self.q(css="div.hidden-content").html.contains(message)
 
     @property
     def entrance_exam_message_selector(self):

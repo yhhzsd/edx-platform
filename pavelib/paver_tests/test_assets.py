@@ -3,7 +3,7 @@
 import ddt
 import os
 from unittest import TestCase
-from pavelib.assets import collect_assets
+from pavelib.assets import collect_assets, COLLECTSTATIC_LOG_DIR_ARG
 from paver.easy import call_task, path
 from mock import patch
 from watchdog.observers.polling import PollingObserver
@@ -219,16 +219,16 @@ class TestCollectAssets(PaverTestCase):
 
     @ddt.data(
         [{
-            "specified_log_location": None,  # Test for default behavior
+            "collect_log_args": {},  # Test for default behavior
             "expected_log_location": "> /dev/null"
         }],
         [{
-            "specified_log_location": "/foo/bar.log",
-            "expected_log_location": "> /foo/bar.log"
+            "collect_log_args": {COLLECTSTATIC_LOG_DIR_ARG: "/foo/bar"},
+            "expected_log_location": "> /foo/bar/lms-collectstatic.log"
         }],  # can use specified log location
         [{
             "systems": ["lms", "cms"],
-            "specified_log_location": None,
+            "collect_log_args": {},
             "expected_log_location": "> /dev/null"
         }],  # multiple systems can be called
     )
@@ -237,8 +237,8 @@ class TestCollectAssets(PaverTestCase):
         """
         Ensure commands sent to the environment for collect_assets are as expected
         """
-        specified_log_loc = options.get("specified_log_location", None)
-        specificed_log_dict = {"collect_log_dir": specified_log_loc}
+        specified_log_loc = options.get("collect_log_args", {})
+        specified_log_dict = specified_log_loc
         log_loc = options.get("expected_log_location", "> /dev/null")
         systems = options.get("systems", ["lms"])
         expected_messages = self._set_expected_messages(log_location=log_loc, systems=systems)
@@ -251,19 +251,20 @@ class TestCollectAssets(PaverTestCase):
             collect_assets(
                 systems,
                 "devstack",
-                **specificed_log_dict
+                **specified_log_dict
             )
         self.assertEqual(self.task_messages, expected_messages)
 
     def test_collect_assets_debug(self):
         """
-        When the method is called specifically with None for the collectstatic_log, then
+        When the method is called specifically with None for the collectstatic log dir, then
         it should run in debug mode and pipe to console.
         """
         expected_log_loc = ""
         systems = ["lms"]
+        kwargs = {COLLECTSTATIC_LOG_DIR_ARG: None}
         expected_messages = self._set_expected_messages(log_location=expected_log_loc, systems=systems)
-        collect_assets(systems, "devstack", collectstatic_log=None)
+        collect_assets(systems, "devstack", **kwargs)
         self.assertEqual(self.task_messages, expected_messages)
 
     def _set_expected_messages(self, log_location, systems):

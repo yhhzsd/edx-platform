@@ -64,6 +64,9 @@ SASS_LOOKUP_DEPENDENCIES = {
     'cms': [path('lms') / 'static' / 'sass' / 'partials', ],
 }
 
+# Collectstatic log directory setting
+COLLECTSTATIC_LOG_DIR_ARG = "collect_log_dir"
+
 
 def get_sass_directories(system, theme_dir=None):
     """
@@ -664,34 +667,23 @@ def collect_assets(systems, settings, **kwargs):
         )))
         print("\t\tFinished collecting {} assets.".format(sys))
 
+
 def _collect_assets_cmd(system, **kwargs):
     """
     Returns the collecstatic command to be used for the given system
     """
     try:
-        if kwargs["collect_log_dir"] is None:
+        if kwargs[COLLECTSTATIC_LOG_DIR_ARG] is None:
             collectstatic_stdout_str = ""
         else:
-        # pipe to specified file, even if debug has also been passed in
-            collectstatic_stdout_str = "> {output_dir}/{sys}-collecstatic.log".format(
-                output_file=kwargs["collect_log_dir"],
+            collectstatic_stdout_str = "> {output_dir}/{sys}-collectstatic.log".format(
+                output_dir=kwargs[COLLECTSTATIC_LOG_DIR_ARG],
                 sys=system
             )
-    except:
+    except KeyError:
         collectstatic_stdout_str = "> /dev/null"
 
-
     return collectstatic_stdout_str
-
-    # collectstatic_log = kwargs.get("collecstatic_log", "/dev/null")
-    #
-    # stdout_str = "> /dev/null"
-    # if collectstatic_log is None:
-    #     stdout_str = ""
-    # elif collectstatic_log == "/dev/null":
-    #     stdout_str = "> /dev/null"
-    # else:
-    #     stdout_str = "> {sys}"
 
 
 def execute_compile_sass(args):
@@ -806,7 +798,7 @@ def update_assets(args):
         help="list of themes to compile sass for",
     )
     parser.add_argument(
-        '--collect-log', dest='collect_log_dir', default="/dev/null",
+        '--collect-log', dest=COLLECTSTATIC_LOG_DIR_ARG, default=None,
         help="When running collectstatic, direct output to specified log directory",
     )
     args = parser.parse_args(args)
@@ -821,11 +813,13 @@ def update_assets(args):
     execute_compile_sass(args)
 
     if args.collect:
-        collect_log_args.update({"collect_log_dir": args.collect_log_dir})
+        if args.collect_log_dir:
+            collect_log_args.update({COLLECTSTATIC_LOG_DIR_ARG: args.collect_log_dir})
 
-        # run collectstatic in debug mode if update_assets is in debug mode and no log location is specified
+        # Run collectstatic in debug mode if update_assets is in debug mode and no log location is specified
+        # This means collectstatic results will output to console
         if args.debug and not args.collect_log_dir:
-            collect_log_args.update({"collect_log_dir": None})
+            collect_log_args.update({COLLECTSTATIC_LOG_DIR_ARG: None})
 
         collect_assets(args.system, args.settings, **collect_log_args)
 

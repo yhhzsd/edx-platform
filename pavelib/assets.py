@@ -645,20 +645,13 @@ def restart_django_servers():
     ))
 
 
-# def collect_assets(systems, settings, collectstatic_log="/dev/null"):
 def collect_assets(systems, settings, **kwargs):
     """
     Collect static assets, including Django pipeline processing.
     `systems` is a list of systems (e.g. 'lms' or 'studio' or both)
     `settings` is the Django settings module to use.
-    `debug` and `collectstatic_log` are used for determining where to
-       pipe collectstatic logging.
-
-       If both 'debug' and 'collecstatic_log' are passed, outputting to
-       a file takes precedence.
+    `**kwargs` include arguments for using a log directory for collectstatic output. Defaults to /dev/null.
     """
-
-    # unless specified, collectstatic (which can be very verbose) pipes to /dev/null
 
     for sys in systems:
         collectstatic_stdout_str = _collect_assets_cmd(sys, **kwargs)
@@ -671,6 +664,8 @@ def collect_assets(systems, settings, **kwargs):
 def _collect_assets_cmd(system, **kwargs):
     """
     Returns the collecstatic command to be used for the given system
+
+    Unless specified, collectstatic (which can be verbose) pipes to /dev/null
     """
     try:
         if kwargs[COLLECTSTATIC_LOG_DIR_ARG] is None:

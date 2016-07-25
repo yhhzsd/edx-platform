@@ -2,7 +2,8 @@
     require(['edx-ui-toolkit/js/utils/html-utils'], function(HtmlUtils) {
         "use strict"
         $(function() {
-            HtmlUtils.setHtml(".about-container", $("#about-content").html().toString())
+            HtmlUtils.setHtml(".about-container", HtmlUtils.HTML($("#about-content").html()));
+            //$(".about-container").html($("#about-content").html());
             addSlider();
         });
 
@@ -23,7 +24,8 @@
                 });
               }
             } else {
-                HtmlUtils.setHtml(".about-container", $("#about-content").html().toString())
+                HtmlUtils.setHtml(".about-container", HtmlUtils.HTML($("#about-content").html()));
+                //$(".about-container").html($("#about-content").html());
             }
          }
     });

@@ -9,6 +9,7 @@ from courseware.courses import get_course_about_section
 from django.conf import settings
 from edxmako.shortcuts import marketing_link
 from openedx.core.lib.courses import course_image_url
+from openedx.core.djangolib.markup import HTML
 %>
 
 <%inherit file="../main.html" />
@@ -432,7 +433,7 @@ from openedx.core.lib.courses import course_image_url
       <div class="inner-container">
         <div class="row">
           <div class="col col-12">
-            ${course_details.overview}
+            ${HTML(course_details.overview)}
           </div>
         </div>
       </div>

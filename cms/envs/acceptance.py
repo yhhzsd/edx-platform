@@ -91,8 +91,6 @@ DATABASES = {
     }
 }
 
-LMS_ROOT_URL = "http://localhost:8000"
-
 # Use the auto_auth workflow for creating users and logging them in
 FEATURES['AUTOMATIC_AUTH_FOR_TESTING'] = True
 

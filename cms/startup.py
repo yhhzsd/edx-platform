@@ -53,7 +53,7 @@ def run():
     xmodule.x_module.descriptor_global_local_resource_url = xblock_local_resource_url
 
     # validate configurations on startup
-    validate_cms_config()
+    validate_cms_config(settings)
 
 
 def add_mimetypes():

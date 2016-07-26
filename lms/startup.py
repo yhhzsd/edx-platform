@@ -88,7 +88,7 @@ def run():
     xmodule.x_module.descriptor_global_local_resource_url = lms_xblock.runtime.local_resource_url
 
     # validate configurations on startup
-    validate_lms_config()
+    validate_lms_config(settings)
 
 
 def add_mimetypes():
